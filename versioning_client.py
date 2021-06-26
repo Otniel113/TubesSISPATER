@@ -12,6 +12,17 @@ def cetakHistoryVersion(history_client):
         print(history_client[i])
 
 def cekUpdate(now_client):
+    # definisikan tujuan IP server, port, buffer size
+    TCP_IP = '127.0.0.1'
+    TCP_PORT = 5005
+    BUFFER_SIZE = 1024
+    
+    # buat socket TCP
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # lakukan koneksi ke server dengan parameter IP dan Port yang telah didefinisikan
+    s.connect((TCP_IP, TCP_PORT))
+
     #Melaukan cek update ke Server dengan Socket
 
     #Kirim
@@ -27,7 +38,21 @@ def cekUpdate(now_client):
         print("Anda sudah memiliki versi terbaru")
         return False
 
+    # tutup koneksi
+    s.close()
+
 def doUpdate(now_client, history_client, adaUpdate):
+    # definisikan tujuan IP server, port, buffer size
+    TCP_IP = '127.0.0.1'
+    TCP_PORT = 5005
+    BUFFER_SIZE = 1024
+    
+    # buat socket TCP
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # lakukan koneksi ke server dengan parameter IP dan Port yang telah didefinisikan
+    s.connect((TCP_IP, TCP_PORT))
+
     #Melakukan update (masih error)
 
     if (not adaUpdate):
@@ -36,9 +61,15 @@ def doUpdate(now_client, history_client, adaUpdate):
         s.send(now_client.encode())
         # terima pesan dari server
         now_server = s.recv(BUFFER_SIZE)
-        history_client.append(now_client.decode())
-        now_client = now_server
+        history_client.append(now_server.decode())
+        now_client = now_server.decode()
+        print("Berhasil melakukan update")
+
     return now_client
+
+    # tutup koneksi
+    s.close()
+
 
 def menu():
     print("\nSelamat datang di sisi client, silakan pilih menu yang akan dipilih : ")
@@ -62,10 +93,7 @@ def pilihan(pil, history_client, now_client, adaUpdate):
 
     return adaUpdate, now_client
 
-# definisikan tujuan IP server, port, buffer size
-TCP_IP = '127.0.0.1'
-TCP_PORT = 5005
-BUFFER_SIZE = 1024
+
 
 #list history versi
 history_client = ["1.1.1", "1.1.2", "1.1.3", "1.2.1", "1.2.4", "1.2.5"]
@@ -73,11 +101,6 @@ history_client = ["1.1.1", "1.1.2", "1.1.3", "1.2.1", "1.2.4", "1.2.5"]
 #versi client
 now_client = "1.2.6"
 
-# buat socket TCP
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# lakukan koneksi ke server dengan parameter IP dan Port yang telah didefinisikan
-s.connect((TCP_IP, TCP_PORT))
 
 #inisialisasi ada update, ganti kalau ada updatean dari server
 adaUpdate = False
@@ -88,8 +111,7 @@ while True:
     if (pil == 0):
         break
     else:
-        adaUpdate, now_client = pilihan(pil, history_client, now_client, adaUpdate)\
+        adaUpdate, now_client = pilihan(pil, history_client, now_client, adaUpdate)
 
-# tutup koneksi
-s.close()
+
 

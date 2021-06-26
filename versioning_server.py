@@ -29,6 +29,20 @@ def rilisVersiBaru(history_server, now_server):
     return new_server
 
 def listenDariClient(now_server):
+    # definisikan alamat IP binding, port, buffer size  yang akan digunakan 
+    TCP_IP = '127.0.0.1'
+    TCP_PORT = 5005
+    BUFFER_SIZE = 1024
+
+    # buat socket bertipe TCP
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # lakukan bind
+    s.bind((TCP_IP, TCP_PORT))
+
+    # server akan listen menunggu hingga ada koneksi dari client
+    s.listen(1)
+
     #Melakukan Listen dari Client kalau Client melakukan menu 3 atau 4
 
     # menerima koneksi
@@ -45,6 +59,9 @@ def listenDariClient(now_server):
 
     # menutup koneksi
     conn.close()
+
+    # tutup koneksi
+    s.close()
 
 def menu():
     print("\nSelamat datang di sisi server, silakan pilih menu yang akan dipilih : ")
@@ -68,25 +85,11 @@ def pilihan(pil, history_server, now_server):
         print("Masukkan Angka yang valid!")
     return new_server   #melakukan return versi server
 
-# definisikan alamat IP binding, port, buffer size  yang akan digunakan 
-TCP_IP = '127.0.0.1'
-TCP_PORT = 5005
-BUFFER_SIZE = 1024
-
 #list history versi
 history_server = ["1.1.1", "1.1.2", "1.1.3", "1.2.1", "1.2.4", "1.2.5", "1.2.6"]
 
 #versi server
 now_server = "1.2.7"
-
-# buat socket bertipe TCP
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# lakukan bind
-s.bind((TCP_IP, TCP_PORT))
-
-# server akan listen menunggu hingga ada koneksi dari client
-s.listen(1)
 
 # lakukan loop forever
 while True:
@@ -96,6 +99,5 @@ while True:
         break
     else:
         now_server = pilihan(pil, history_server, now_server)
+    
 
-# tutup koneksi
-s.close()
